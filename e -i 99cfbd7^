@@ -1,0 +1,59 @@
+[33mcommit e2fffe449a579add8c429428fdcf7172530a74a8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 14:36:58 2026 +0545
+
+    Add settings.py without secrets
+
+[33mcommit 707abc7a9a17acd1693f9e8c835deb51c7670f4b[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 14:36:37 2026 +0545
+
+    Remove settings.py to clean secrets
+
+[33mcommit 99cfbd713c066e3d39b29c057110b83598211feb[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 14:30:39 2026 +0545
+
+    committed
+
+[33mcommit 7d10ba8ca74889098bb5e8b0a285962e25a7b57c[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 14:19:19 2026 +0545
+
+    Add Render domain to ALLOWED_HOSTS
+
+[33mcommit 7a7b83c265439179927eaa351bca5322929af42a[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 14:05:34 2026 +0545
+
+    Initial commit
+
+[33mcommit 10c44b9c2d51cbb9eeffd50420a17785bf6845e7[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 11:25:40 2026 +0545
+
+    Initial commit: deploy Django project
+
+[33mcommit ae2e6fb048e4fcc133c543a61b5e956cd5583017[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 11:06:23 2026 +0545
+
+    Fix root URL and settings
+
+[33mcommit b2b6dc551fad3a0918e7f37f04926bd622e1dd8a[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 10:58:04 2026 +0545
+
+    Fix root URL and settings
+
+[33mcommit 21b1142ca75ef26c8dc7d79b68c388c7848baec6[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 07:18:43 2026 +0545
+
+    Fix static files: add WhiteNoise and update settings.py
+
+[33mcommit 692aa318b0f95945b53f61665742f1d5cd9184a2[m
+Author: Lakhan Xettri  <itsmeyourcrush2061@gmail.com>
+Date:   Tue Feb 17 06:01:01 2026 +0545
+
+    hotel project

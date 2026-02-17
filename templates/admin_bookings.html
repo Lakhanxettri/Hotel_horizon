@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Bookings</title>
+<style>
+body { font-family: Arial; background: #f5f5f5; }
+.container { max-width: 900px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2);}
+h2 { text-align:center; margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+th { background-color: #ff6347; color: white; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+button { padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer; color: white; }
+.approve { background-color: #28a745; }
+.approve:hover { background-color: #218838; }
+.reject { background-color: #dc3545; }
+.reject:hover { background-color: #c82333; }
+a { text-decoration: none; color: #333; display: inline-block; margin-top: 15px; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>All Bookings</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Room Type</th>
+            <th>Check-In</th>
+            <th>Check-Out</th>
+            <th>Status</th>
+            <th>ID Proof</th>
+            <th>Actions</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.name }}</td>
+            <td>{{ booking.email }}</td>
+            <td>{{ booking.phone }}</td>
+            <td>{{ booking.room_type }}</td>
+            <td>{{ booking.check_in }}</td>
+            <td>{{ booking.check_out }}</td>
+            <td>{{ booking.status }}</td>
+            <td>
+                {% if booking.nationality %}
+                <a href="{{ booking.nationality.url }}" target="_blank">View</a>
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>
+                {% if booking.status == 'PENDING' %}
+                <a href="{% url 'update-booking-status' booking.id 'approve' %}">
+                    <button class="approve">Approve</button>
+                </a>
+                <a href="{% url 'update-booking-status' booking.id 'reject' %}">
+                    <button class="reject">Reject</button>
+                </a>
+                {% else %}
+                -
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{% url 'home' %}">Back to Home</a>
+</div>
+</body>
+</html>

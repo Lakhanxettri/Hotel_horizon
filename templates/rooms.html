@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grand Horizon Hotel - Rooms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        .hero-section {
+            background-image: url("{% static 'images/rooms-hero.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            text-align: center;
+            padding: 120px 0;
+            position: relative;
+        }
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top:0; left:0;
+            width:100%; height:100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index:1;
+        }
+        .hero-section .container {
+            position: relative;
+            z-index:2;
+        }
+        .room-card img {
+            height: 220px;
+            object-fit: cover;
+        }
+        .room-category {
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">Grand Horizon</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'rooms' %}">Rooms</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Our Rooms</h1>
+        <p class="lead">Choose the perfect room for your stay.</p>
+    </div>
+</section>
+
+<!-- ================= ROOM CATEGORIES ================= -->
+<div class="container py-5">
+
+    <!-- Deluxe Rooms -->
+    <h2 class="text-center room-category">Deluxe Rooms</h2>
+    <div class="row mt-4">
+        <div class="col-md-4 mb-4">
+            <div class="card room-card shadow-sm">
+                <img src="{% static 'images/room10.jpg' %}" class="card-img-top" alt="Deluxe Room 1">
+                <div class="card-body">
+                    <h5 class="card-title">Deluxe Room City View</h5>
+                    <p class="card-text">Spacious room with king-size bed and breathtaking city views.</p>
+                    <p><strong>Features:</strong> Wi-Fi, Air Conditioning, Mini Bar</p>
+                    <p class="fw-bold">$120/night</p>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card room-card shadow-sm">
+                <img src="{% static 'images/room2.jpg' %}" class="card-img-top" alt="Deluxe Room 2">
+                <div class="card-body">
+                    <h5 class="card-title">Deluxe Room Garden View</h5>
+                    <p class="card-text">Relax with a view of our beautiful gardens.</p>
+                    <p><strong>Features:</strong> Wi-Fi, Balcony, Coffee Maker</p>
+                    <p class="fw-bold">$130/night</p>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Executive Suites -->
+    <h2 class="text-center room-category">Executive Suites</h2>
+    <div class="row mt-4">
+        <div class="col-md-4 mb-4">
+            <div class="card room-card shadow-sm">
+                <img src="{% static 'images/room3.jpg' %}" class="card-img-top" alt="Executive Suite 1">
+                <div class="card-body">
+                    <h5 class="card-title">Executive Suite King</h5>
+                    <p class="card-text">Luxury suite with separate living area and premium amenities.</p>
+                    <p><strong>Features:</strong> Wi-Fi, King Bed, Jacuzzi, Mini Bar</p>
+                    <p class="fw-bold">$250/night</p>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card room-card shadow-sm">
+                <img src="{% static 'images/room5.jpg' %}" class="card-img-top" alt="Executive Suite 2">
+                <div class="card-body">
+                    <h5 class="card-title">Executive Suite Twin</h5>
+                    <p class="card-text">Perfect for business travelers or friends sharing a room.</p>
+                    <p><strong>Features:</strong> Wi-Fi, Two Beds, Balcony, Lounge Area</p>
+                    <p class="fw-bold">$270/night</p>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Family Rooms -->
+    <h2 class="text-center room-category">Family Rooms</h2>
+    <div class="row mt-4">
+        <div class="col-md-4 mb-4">
+            <div class="card room-card shadow-sm">
+                <img src="{% static 'images/room6.jpg' %}" class="card-img-top" alt="Family Room 1">
+                <div class="card-body">
+                    <h5 class="card-title">Family Room Standard</h5>
+                    <p class="card-text">Comfortable room for 4 with two beds and sofa.</p>
+                    <p><strong>Features:</strong> Wi-Fi, Air Conditioning, Sofa Bed</p>
+                    <p class="fw-bold">$180/night</p>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card room-card shadow-sm">
+                <img src="{% static 'images/room7.jpg' %}" class="card-img-top" alt="Family Room 2">
+                <div class="card-body">
+                    <h5 class="card-title">Family Room Deluxe</h5>
+                    <p class="card-text">Extra space for families with premium amenities.</p>
+                    <p><strong>Features:</strong> Wi-Fi, Balcony, Mini Bar, Extra Bed</p>
+                    <p class="fw-bold">$200/night</p>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-dark text-white text-center p-3">
+    <p class="mb-0">&copy; 2026 Grand Horizon Hotel. All Rights Reserved.</p>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
