@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False  # Set True only for debugging
 
 ALLOWED_HOSTS = [
-    "management-system-1-i7ks.onrender.com",  # your Render URL
+    os.environ.get("ALLOWED_HOSTS", "").split(",") 
 ]
 
 # --------------------------------------------------
