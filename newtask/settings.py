@@ -15,7 +15,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')  # fallback
 
 DEBUG = os.getenv("DEBUG", "False") == "True" # Set False in production
 
-ALLOWED_HOSTS = ["hotel-horizon.onrender.com"] 
+ALLOWED_HOSTS = ["hotel-horizon1.onrender.com"] 
 # Allow all hosts for development
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # --------------------------------------------------
