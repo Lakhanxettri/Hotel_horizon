@@ -1,0 +1,41 @@
+<!-- templates/reviews/all_reviews.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Reviews</title>
+    <!-- Bootstrap CDN for quick styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f4f4f4; font-family: Arial, sans-serif; padding: 20px; }
+        .review-card { background: #fff; border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .review-name { font-weight: bold; }
+        .review-date { color: #666; font-size: 0.9em; margin-left: 10px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .btn-home { margin-top: 20px; display: block; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">All Reviews</h2>
+
+        {% if reviews %}
+            {% for review in reviews %}
+                <div class="review-card">
+                    <span class="review-name">{{ review.name }}</span>
+                    <span class="review-date">({{ review.created_at|date:"M d, Y H:i" }})</span>
+                    <p style="margin-top:10px;">{{ review.message }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center text-muted">No reviews found.</p>
+        {% endif %}
+
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-home">Back to Home</a>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

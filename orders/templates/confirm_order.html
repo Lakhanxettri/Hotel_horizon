@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Order</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #27ae60;
+            color: white;
+            font-size: 16px;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f0f9f5;
+        }
+
+        h3 {
+            text-align: center;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .confirm-button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background-color: #27ae60;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .confirm-button:hover {
+            background-color: #1e8449;
+        }
+
+        .back-button {
+            display: block;
+            margin: 10px auto 40px auto;
+            padding: 10px 25px;
+            background-color: #e67e22;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .back-button:hover {
+            background-color: #ca6f1e;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Here is your order</h2>
+
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Total</th>
+        </tr>
+
+        {% for entry in items %}
+        <tr>
+            <td>{{ entry.item.name }}</td>
+            <td>{{ entry.quantity }}</td>
+            <td>${{ entry.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Total: ${{ total }}</h3>
+
+    <form method="POST" action="{% url 'confirm_order' %}">
+        {% csrf_token %}
+        <button type="submit" class="confirm-button">Confirm Order</button>
+    </form>
+
+    <a href="{% url 'menu' %}" class="back-button">wanna order more items</a>
+
+</body>
+</html>

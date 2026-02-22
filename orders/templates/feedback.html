@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Reviews</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .avg-rating {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .review-form {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .review-form input,
+        .review-form textarea,
+        .review-form select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .review-form button {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .review-form button:hover {
+            background: #218838;
+        }
+
+        /* Slider Styles */
+        .review-slider {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .review-slide {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+        }
+
+        .review-slide.active {
+            opacity: 1;
+        }
+
+        .review-slide h4 {
+            margin: 0 0 5px 0;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .like-btn {
+            background: #007bff;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .like-btn:hover {
+            background: #0069d9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h2>Customer Reviews</h2>
+
+    {% if avg_rating %}
+        <div class="avg-rating">
+            Average Rating: <strong>{{ avg_rating|floatformat:1 }} ⭐</strong>
+        </div>
+    {% endif %}
+
+    <div class="review-form">
+        <h3>Leave a Review</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.name.label }}<br>
+            {{ form.name }}<br>
+
+            <label>Rating</label><br>
+            {{ form.rating }}<br>
+
+            {{ form.message.label }}<br>
+            {{ form.message }}<br>
+
+            <button type="submit">Submit Review</button>
+        </form>
+    </div>
+
+    <h3>Latest Reviews</h3>
+    <div class="review-slider">
+        {% for fb in feedbacks %}
+        <div class="review-slide">
+            <h4>{{ fb.name }}</h4>
+            <div class="stars">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= fb.rating %}★{% else %}☆{% endif %}
+                {% endfor %}
+            </div>
+            <p>{{ fb.message }}</p>
+            <form action="{% url 'like_feedback' fb.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="like-btn">👍 Like ({{ fb.total_likes }})</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const slides = document.querySelectorAll(".review-slide");
+    let index = 0;
+
+    function showSlide() {
+        slides.forEach(slide => slide.classList.remove("active"));
+        slides[index].classList.add("active");
+        index = (index + 1) % slides.length;
+    }
+
+    if (slides.length > 0) {
+        showSlide();
+        setInterval(showSlide, 3000); // Change slide every 3 seconds
+    }
+});
+</script>
+
+</body>
+</html>

@@ -20,6 +20,83 @@
             background-attachment: fixed;
             background-repeat: no-repeat;
         }
+
+        /* Review Section Styles */
+        .review-section {
+            background: rgba(255,255,255,0.95);
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 900px;
+            margin: 50px auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .review-slider {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .review-slide {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            padding: 20px;
+        }
+
+        .review-slide.active {
+            opacity: 1;
+        }
+
+        .review-slide h4 {
+            margin: 0 0 5px 0;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .like-btn {
+            background: #007bff;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .like-btn:hover {
+            background: #0069d9;
+        }
+
+        .feedback-form input,
+        .feedback-form select,
+        .feedback-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .feedback-form button {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .feedback-form button:hover {
+            background: #218838;
+        }
     </style>
 </head>
 <body>
@@ -39,6 +116,7 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'booking' %}">Booking</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'menu' %}">Menu</a></li>
             </ul>
         </div>
     </div>
@@ -116,33 +194,45 @@
   </div>
 </section>
 
-<!-- ================= SERVICES SECTION ================= -->
-<section class="py-5">
-  <div class="container">
-    <h2 class="text-center mb-4">Our Services</h2>
-    <div class="row text-center">
+<!-- ================= FEEDBACK SECTION ================= -->
+<section class="review-section">
+  <h2 class="text-center mb-4">Customer Reviews</h2>
 
-      <div class="col-md-3">
-        <h5>Free Wi-Fi</h5>
-        <p>High-speed internet access throughout the hotel.</p>
+  {% if avg_rating %}
+    <div class="text-center mb-4">Average Rating: <strong>{{ avg_rating|floatformat:1 }} ⭐</strong></div>
+  {% endif %}
+
+  <!-- Feedback Form -->
+  <div class="feedback-form mb-5">
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.name.label }}<br>
+      {{ form.name }}<br>
+      <label>Rating</label><br>
+      {{ form.rating }}<br>
+      {{ form.message.label }}<br>
+      {{ form.message }}<br>
+      <button type="submit">Submit Review</button>
+    </form>
+  </div>
+
+  <!-- Review Slider -->
+  <div class="review-slider">
+    {% for fb in feedbacks %}
+    <div class="review-slide">
+      <h4>{{ fb.name }}</h4>
+      <div class="stars">
+        {% for i in "12345" %}
+          {% if forloop.counter <= fb.rating %}★{% else %}☆{% endif %}
+        {% endfor %}
       </div>
-
-      <div class="col-md-3">
-        <h5>Restaurant</h5>
-        <p>Enjoy fine dining with our expert chefs.</p>
-      </div>
-
-      <div class="col-md-3">
-        <h5>Swimming Pool</h5>
-        <p>Relax and refresh in our luxury pool.</p>
-      </div>
-
-      <div class="col-md-3">
-        <h5>24/7 Support</h5>
-        <p>Our staff is available anytime for assistance.</p>
-      </div>
-
+      <p>{{ fb.message }}</p>
+      <form action="{% url 'like_feedback' fb.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="like-btn">👍 Like ({{ fb.total_likes }})</button>
+      </form>
     </div>
+    {% endfor %}
   </div>
 </section>
 
@@ -152,6 +242,11 @@
     <h2>Book Your Stay Today</h2>
     <p>Experience comfort like never before.</p>
     <a href="{% url 'rooms' %}" class="btn btn-warning btn-lg">Reserve Now</a>
+    <a href="{% url 'feedback' %}" class="btn btn-success btn-lg">⭐ Leave Feedback</a>
+    <!-- templates/home.html -->
+    <a href="{% url 'all_reviews' %}" class="btn btn-primary" style="display:block; margin: 20px auto; text-align:center;">
+    Show All Reviews
+    </a>
   </div>
 </section>
 
@@ -162,6 +257,25 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Review Slider JS -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const slides = document.querySelectorAll(".review-slide");
+    let index = 0;
+
+    function showSlide() {
+        slides.forEach(slide => slide.classList.remove("active"));
+        slides[index].classList.add("active");
+        index = (index + 1) % slides.length;
+    }
+
+    if (slides.length > 0) {
+        showSlide();
+        setInterval(showSlide, 3000); // Change review every 3 seconds
+    }
+});
+</script>
 
 </body>
 </html>

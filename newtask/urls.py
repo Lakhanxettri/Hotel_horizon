@@ -25,7 +25,9 @@ from django.http import HttpResponse
 urlpatterns = [
     path('', home), 
     path('admin', admin.site.urls),
-    path('',include('restaurant.urls'))
+    path('',include('restaurant.urls')),
+    path('',include('orders.urls'))
+    
     
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

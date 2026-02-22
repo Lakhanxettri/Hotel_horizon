@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # --------------------------------------------------
 # BASE DIRECTORY
@@ -7,27 +8,30 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --------------------------------------------------
-# SECURITY
+# LOAD ENV VARIABLES
 # --------------------------------------------------
-SECRET_KEY = os.environ.get("SECRET_KEY")
+load_dotenv()
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')  # fallback for dev
 
-DEBUG = False  # Set True only for debugging
+DEBUG = False # Set False in production
 
-ALLOWED_HOSTS = [
-    os.environ.get("ALLOWED_HOSTS", "").split(",") 
-]
+ALLOWED_HOSTS = ["hotel_horizon.onrender.com","*"]  # Allow all hosts for development
 
 # --------------------------------------------------
-# APPLICATIONS
+# INSTALLED APPS
 # --------------------------------------------------
 INSTALLED_APPS = [
+    # Django default apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    # Your apps
     "restaurant",
+    "orders",
 ]
 
 # --------------------------------------------------
@@ -35,7 +39,7 @@ INSTALLED_APPS = [
 # --------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # Must be right after SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # for static file compression
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -52,10 +56,11 @@ ROOT_URLCONF = "newtask.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": True,
+        "DIRS": [BASE_DIR / "templates"],  # optional global template folder
+        "APP_DIRS": True,  # must be True to find app templates
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -67,7 +72,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "newtask.wsgi.application"
 
 # --------------------------------------------------
-# DATABASE (SQLite for small project)
+# DATABASE
 # --------------------------------------------------
 DATABASES = {
     "default": {
@@ -80,61 +85,48 @@ DATABASES = {
 # PASSWORD VALIDATION
 # --------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # --------------------------------------------------
 # INTERNATIONALIZATION
 # --------------------------------------------------
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
 USE_TZ = True
 
 # --------------------------------------------------
-# STATIC FILES (WhiteNoise Production Setup)
+# STATIC FILES (CSS, JS)
 # --------------------------------------------------
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
+STATIC_ROOT = BASE_DIR / "staticfiles"  # for collectstatic
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # --------------------------------------------------
-# MEDIA FILES
+# MEDIA FILES (Uploaded images)
 # --------------------------------------------------
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # --------------------------------------------------
-# EMAIL (GMAIL SMTP - Use App Password)
+# EMAIL SETTINGS (Gmail SMTP)
 # --------------------------------------------------
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # --------------------------------------------------
 # OWNER PAGE TOKEN
 # --------------------------------------------------
-OWNER_PAGE_TOKEN = os.environ.get("OWNER_PAGE_TOKEN")
+OWNER_PAGE_TOKEN = os.getenv("OWNER_PAGE_TOKEN")
 
 # --------------------------------------------------
 # DEFAULT AUTO FIELD

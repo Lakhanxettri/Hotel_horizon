@@ -4,6 +4,10 @@ from .models import Booking
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
+from orders.models import Feedback
+from orders.forms import FeedbackForm
+from django.db.models import Avg
+
 
 
 def home(request):
@@ -103,3 +107,4 @@ def owner_bookings(request):
 
     # 5️⃣ Render page with bookings
     return render(request, 'owner_bookings.html', {'bookings': bookings})
+

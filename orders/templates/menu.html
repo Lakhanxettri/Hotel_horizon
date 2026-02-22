@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Our Menu</title>
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 30px;
+    background: linear-gradient(to right, #f8f9fa, #eef2f3);
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 32px;
+    letter-spacing: 1px;
+}
+
+h2 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: #34495e;
+    border-left: 5px solid #e67e22;
+    padding-left: 10px;
+}
+
+.button-bar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.button-bar a,
+.button-bar button {
+    padding: 12px 22px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.cart-button {
+    background: #e67e22;
+}
+.cart-button:hover {
+    background: #d35400;
+    transform: translateY(-2px);
+}
+
+.home-button {
+    background: #3498db;
+}
+.home-button:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.menu-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.menu-item {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+}
+
+.menu-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.menu-item img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.menu-item h3 {
+    margin: 10px 0 5px 0;
+    color: #2c3e50;
+}
+
+.menu-item p {
+    margin: 4px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.quantity-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.quantity-wrapper button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: #e67e22;
+    color: white;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.quantity-wrapper button:hover {
+    background: #d35400;
+}
+
+.quantity-wrapper input {
+    width: 55px;
+    text-align: center;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    font-weight: 600;
+}
+
+/* CATEGORY ADD BUTTON */
+.add-button {
+    display: block;
+    margin: 25px auto 10px auto;
+    padding: 14px 35px;
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+}
+
+.add-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(39, 174, 96, 0.4);
+}
+
+.add-button:active {
+    transform: translateY(0);
+}
+
+hr {
+    margin-top: 40px;
+    border: none;
+    height: 1px;
+    background: #ddd;
+}
+</style>
+</head>
+<body>
+
+<h1>Our Menu</h1>
+
+<div class="button-bar">
+    <a href="{% url 'view_cart' %}" class="cart-button">🛒 View Cart</a>
+    <a href="{% url 'home' %}" class="home-button">🏠 Back to Home</a>
+</div>
+
+<form method="POST" action="{% url 'add_to_cart_bulk' %}">
+    {% csrf_token %}
+
+    {% for category in categories %}
+        <h2>{{ category.name }}</h2>
+
+        <div class="menu-container">
+            {% for item in category.items.all %}
+                {% if item.available %}
+                <div class="menu-item">
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}">
+                    {% endif %}
+                    <h3>{{ item.name }}</h3>
+                    <p>{{ item.description }}</p>
+                    <p>${{ item.price }}</p>
+
+                    <div class="quantity-wrapper">
+                        <button type="button" onclick="decreaseQty({{ item.id }})">−</button>
+                        <input type="number" id="qty-{{ item.id }}" name="quantity_{{ item.id }}" value="0" min="0">
+                        <button type="button" onclick="increaseQty({{ item.id }})">+</button>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- One Add Button per Category -->
+        <button type="submit" name="category_id" value="{{ category.id }}" class="add-button">
+            Add Selected Items from {{ category.name }}
+        </button>
+
+        <hr>
+    {% endfor %}
+</form>
+
+<script>
+function increaseQty(id){
+    let input = document.getElementById("qty-"+id);
+    input.value = parseInt(input.value)+1;
+}
+function decreaseQty(id){
+    let input = document.getElementById("qty-"+id);
+    if(parseInt(input.value) > 0) input.value = parseInt(input.value)-1;
+}
+</script>
+
+</body>
+</html>
