@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-
+import dj_database_url
 # --------------------------------------------------
 # BASE DIRECTORY
 # --------------------------------------------------
@@ -13,10 +13,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')  # fallback for dev
 
-DEBUG = False # Set False in production
+DEBUG = os.getenv("DEBUG", "False") == "True" # Set False in production
 
-ALLOWED_HOSTS = ["hotel_horizon.onrender.com","*"]  # Allow all hosts for development
-
+ALLOWED_HOSTS = ["hotel-horizon.onrender.com"] 
+# Allow all hosts for development
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # --------------------------------------------------
 # INSTALLED APPS
 # --------------------------------------------------
@@ -73,12 +74,11 @@ WSGI_APPLICATION = "newtask.wsgi.application"
 
 # --------------------------------------------------
 # DATABASE
-# --------------------------------------------------
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+    )
 }
 
 # --------------------------------------------------
@@ -103,7 +103,6 @@ USE_TZ = True
 # STATIC FILES (CSS, JS)
 # --------------------------------------------------
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"  # for collectstatic
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # --------------------------------------------------
