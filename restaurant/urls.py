@@ -6,11 +6,17 @@ urlpatterns = [
     path('rooms/', views.rooms, name='rooms'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
-    path('booking/', views.booking_view, name='booking'), 
+    path('booking/', views.booking_view, name='booking'),
     path('admin-bookings/', views.admin_booking_list, name='admin-bookings'),
     path('booking/<int:booking_id>/<str:action>/', views.update_booking_status, name='update-booking-status'),
     path('owner/bookings/', views.owner_bookings, name='owner_bookings'),
-    
-    
-]
 
+    # Auth URLs
+    path('register/', views.register_view, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+
+    # User dashboard
+    path('my-bookings/', views.my_bookings, name='my_bookings'),
+    path('my-orders/', views.my_orders, name='my_orders'),
+]

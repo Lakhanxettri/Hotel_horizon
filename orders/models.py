@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
@@ -18,6 +19,13 @@ class MenuItem(models.Model):
         return self.name
 
 class Customer(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='customer_profile'
+    )
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20)
@@ -33,6 +41,13 @@ class Order(models.Model):
         ('Delivered', 'Delivered'),
     ]
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='orders'
+    )
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -49,7 +64,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    price = models.DecimalField(max_digits=8, decimal_places=2)  # price per item
+    price = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
         return f"{self.menu_item.name} x {self.quantity}"
@@ -65,6 +80,13 @@ class Feedback(models.Model):
         (5, "5 Stars"),
     ]
 
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='feedbacks'
+    )
     name = models.CharField(max_length=100)
     message = models.TextField()
     rating = models.IntegerField(choices=RATING_CHOICES)
@@ -84,6 +106,13 @@ class Feedback(models.Model):
         return f"{self.name} - {self.rating}⭐"
     
 class Review(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='reviews'
+    )
     name = models.CharField(max_length=100)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

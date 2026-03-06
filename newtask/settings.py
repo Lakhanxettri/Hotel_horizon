@@ -15,7 +15,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')  # fallback
 
 DEBUG = os.getenv("DEBUG", "False") == "True" # Set False in production
 
-ALLOWED_HOSTS = ["hotel-horizon1.onrender.com"] 
+ALLOWED_HOSTS = ["hotel-horizon1.onrender.com","*"] 
 # Allow all hosts for development
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # --------------------------------------------------
@@ -126,6 +126,25 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # OWNER PAGE TOKEN
 # --------------------------------------------------
 OWNER_PAGE_TOKEN = os.getenv("OWNER_PAGE_TOKEN")
+
+# --------------------------------------------------
+# AUTH SETTINGS
+# --------------------------------------------------
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+# --------------------------------------------------
+# MESSAGE TAGS (Bootstrap compatible)
+# --------------------------------------------------
+from django.contrib.messages import constants as message_constants
+MESSAGE_TAGS = {
+    message_constants.DEBUG: 'secondary',
+    message_constants.INFO: 'info',
+    message_constants.SUCCESS: 'success',
+    message_constants.WARNING: 'warning',
+    message_constants.ERROR: 'danger',
+}
 
 # --------------------------------------------------
 # DEFAULT AUTO FIELD

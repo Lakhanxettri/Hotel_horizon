@@ -117,16 +117,48 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'booking' %}">Booking</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'menu' %}">Menu</a></li>
+
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'my_bookings' %}">My Bookings</a></li>
+                        <li><a class="dropdown-item" href="{% url 'my_orders' %}">My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link btn btn-outline-light btn-sm ms-2 px-3" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-warning btn-sm ms-2 px-3" href="{% url 'register' %}">Register</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
 </nav>
+
+<!-- ================= MESSAGES ================= -->
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 <!-- ================= HERO SECTION ================= -->
 <section class="bg-light text-center p-5">
   <div class="container">
     <h1 class="display-4 fw-bold">Experience Luxury & Comfort</h1>
     <p class="lead">Stay with us and enjoy world-class hospitality.</p>
+    {% if user.is_authenticated %}
+    <p class="text-muted">Welcome back, <strong>{{ user.username }}</strong>!</p>
+    {% endif %}
     <a href="{% url 'rooms' %}" class="btn btn-primary btn-lg mt-3">Explore Rooms</a>
   </div>
 </section>
@@ -203,6 +235,7 @@
   {% endif %}
 
   <!-- Feedback Form -->
+  {% if user.is_authenticated %}
   <div class="feedback-form mb-5">
     <form method="POST">
       {% csrf_token %}
@@ -215,6 +248,11 @@
       <button type="submit">Submit Review</button>
     </form>
   </div>
+  {% else %}
+  <div class="text-center mb-4">
+    <p><a href="{% url 'login' %}">Login</a> to submit a review.</p>
+  </div>
+  {% endif %}
 
   <!-- Review Slider -->
   <div class="review-slider">
@@ -227,10 +265,14 @@
         {% endfor %}
       </div>
       <p>{{ fb.message }}</p>
+      {% if user.is_authenticated %}
       <form action="{% url 'like_feedback' fb.id %}" method="POST">
         {% csrf_token %}
         <button type="submit" class="like-btn">👍 Like ({{ fb.total_likes }})</button>
       </form>
+      {% else %}
+      <span class="text-muted">👍 {{ fb.total_likes }} likes — <a href="{% url 'login' %}">Login to like</a></span>
+      {% endif %}
     </div>
     {% endfor %}
   </div>
@@ -243,10 +285,7 @@
     <p>Experience comfort like never before.</p>
     <a href="{% url 'rooms' %}" class="btn btn-warning btn-lg">Reserve Now</a>
     <a href="{% url 'feedback' %}" class="btn btn-success btn-lg">⭐ Leave Feedback</a>
-    <!-- templates/home.html -->
-    <a href="{% url 'all_reviews' %}" class="btn btn-primary" style="display:block; margin: 20px auto; text-align:center;">
-    Show All Reviews
-    </a>
+    <a href="{% url 'all_reviews' %}" class="btn btn-primary btn-lg">Show All Reviews</a>
   </div>
 </section>
 
@@ -272,7 +311,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (slides.length > 0) {
         showSlide();
-        setInterval(showSlide, 3000); // Change review every 3 seconds
+        setInterval(showSlide, 3000);
     }
 });
 </script>
